@@ -1,1 +1,1 @@
-# From Spatial to Spectral: Frequency Guided Representation Learning for Small Object Detection Across Detector Architectures
+# From Spatial to Spectral: An Efficacious, Frequency-Guided Representation Learner for Small Object Detection
