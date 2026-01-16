@@ -62,8 +62,7 @@
 \begin{document}
 
 \twocolumn[
-  \icmltitle{Submission and Formatting Instructions for \\
-    International Conference on Machine Learning (ICML 2026)}
+  \icmltitle{From Spatial to Spectral: An Efficient, Frequency-Guided Representation Learner for Small Object Detection}
 
   % It is OKAY to include author information, even for blind submissions: the
   % style file will automatically remove it for you unless you've provided
@@ -123,37 +122,211 @@
 % Or, if applicable, use the standard equal contribution text:
 % \printAffiliationsAndNotice{\icmlEqualContribution}
 
+
+
+%---------------------
 \begin{abstract}
   This document provides a basic paper template and submission guidelines.
   Abstracts must be a single paragraph, ideally between 4--6 sentences long.
   Gross violations will trigger corrections at the camera-ready phase.
 \end{abstract}
 
+%---------------------
 \section{Introduction}
 
+
+
+%---------------------
 \section{Related Work}
 
-This section reviews related work from three perspectives: efficient network architecture design, small object detection, and frequency domain analysis in object detection.
+We review prior work from three angles that are most relevant to our goal: (i) efficient detector architectures, (ii) small object detection strategies, and (iii) frequency-domain modeling for dense prediction.
 
-\subsection{Efficient Network Architecture Design}
+\subsection{Efficient Detector Architectures}
 
-Efficient network architectures are crucial for real-time object detection. The YOLO series has been a cornerstone, with recent iterations like YOLOv10 \cite{yolov10} and YOLOv11 \cite{yolov11} achieving improvements in accuracy and speed. FBRT-YOLO \cite{fbrt-yolo} further enhances YOLO for small object detection through feature complementary mapping modules and multi-kernel perception units.
+Real-time detection has been driven by architectural efficiency in backbones, feature pyramids, and heads. One-stage YOLO-style detectors optimize the accuracy--latency trade-off through carefully designed blocks and multi-scale prediction, with recent variants continuing to improve both speed and accuracy \cite{yolov10,yolov11}. Lightweight enhancements for challenging regimes (e.g., cluttered scenes) often rely on stronger feature aggregation or multi-kernel perception to increase representational diversity while keeping inference efficient \cite{fbrt-yolo}. 
 
-Beyond YOLO, DETR (Detection Transformer) \cite{detr} eliminated anchor boxes and introduced end-to-end detection, though its quadratic complexity limits efficiency. RT-DETR \cite{rt-detr} and DINO \cite{dino} address this through efficient attention mechanisms. ELAN \cite{elan} and LSNet \cite{lsnet} demonstrate effective layer aggregation strategies, with LSNet employing large kernels for global perception and small kernels for local aggregation. MobileU-ViT \cite{mobileuvit} combines CNNs and Transformers in a lightweight framework using large-kernel depthwise separable convolutions.
+In parallel, Transformer-based detectors seek end-to-end set prediction by removing hand-crafted components such as anchors \cite{detr}. Subsequent work improves the practicality of DETR-like models via more efficient attention and training strategies, enabling competitive performance under constrained budgets \cite{rt-detr,dino}. Despite these advances, both CNN- and Transformer-based detectors still face a common tension for tiny/small objects: improving fine-detail sensitivity typically increases computation, memory, or architectural intrusion, making it difficult to deploy a uniformly effective solution across detector families.
 
 \subsection{Small Object Detection}
 
-Small object detection faces challenges due to limited spatial information and weak feature responses. Traditional frameworks like Faster R-CNN \cite{fasterrcnn} and SSD \cite{ssd} lose critical information during downsampling. HS-FPN \cite{hs-fpn} addresses this by leveraging discrete cosine transform (DCT) to extract high-frequency components through a High-frequency Perception (HFP) module and capturing pixel-level spatial dependencies via a Spatial Dependency Perception (SDP) module.
+Small objects are inherently information-limited: they occupy few pixels, induce weak feature responses, and are easily suppressed by downsampling and coarse fusion. Early two-stage and one-stage frameworks (e.g., Faster R-CNN and SSD) already revealed the difficulty of preserving small-object cues under feature hierarchy and stride growth \cite{fasterrcnn,ssd}. A large body of work improves small-object performance by strengthening multi-scale feature fusion (e.g., FPN and its variants) \cite{fpn}, introducing additional pyramid levels, and designing attention or alignment modules to enhance small-scale features.
 
-Multi-scale feature fusion approaches build upon Feature Pyramid Networks (FPN) \cite{fpn}, with recent enhancements incorporating attention mechanisms and specialized modules for small object detection \cite{hs-fpn}. Context information modeling through large receptive fields also proves effective. LSNet \cite{lsnet} combines large and small kernels for global and local context, while FBRT-YOLO \cite{fbrt-yolo} employs multi-kernel perception units to capture cross-scale relationships efficiently.
+Recent methods increasingly emphasize \emph{detail-aware} feature enrichment. For example, HS-FPN highlights tiny objects by generating high-frequency responses as mask weights and complements this with explicit spatial dependency modeling \cite{hs-fpn}. Context modeling (e.g., large receptive fields or multi-kernel designs) also helps disambiguate tiny objects from background clutter \cite{lsnet,fbrt-yolo}. However, many of these approaches focus on either spatial fusion or receptive-field engineering, while the \emph{mechanism of how fine details are suppressed and should be reconstructed} is often left implicit, and portability across heterogeneous detector designs is not always validated.
 
-\subsection{Frequency Domain Analysis in Object Detection}
+\subsection{Frequency-Domain Modeling for Dense Prediction}
 
-Frequency domain analysis offers complementary perspectives for feature extraction. Global Filter Networks (GFNet) \cite{gfnet} replace self-attention layers with global filter layers using 2D FFT/IFFT, achieving linear complexity while maintaining global receptive fields. Frequency Dynamic Convolution (FDConv) \cite{fdconv} constructs frequency-disentangled convolution kernels by dividing the spectrum into low, medium, and high-frequency bands, with Kernel Spectrum Modulation (KSM) and Frequency Band Modulation (FBM) for adaptive weighting.
+Frequency-domain analysis offers a complementary lens to understand and manipulate representation learning. A line of work uses Fourier transforms to achieve efficient global interactions. GFNet replaces quadratic self-attention with frequency-domain filtering (FFT--filtering--IFFT), yielding log-linear complexity while maintaining global receptive fields \cite{gfnet}. Other work links common architectural operations to spectral decomposition: FcaNet interprets channel attention as a frequency-domain compression process and generalizes global pooling to multi-spectral channel attention \cite{fcanet}.
 
-Wavelet-based methods also demonstrate effectiveness. Haar wavelet downsampling \cite{haar} preserves edge and texture information crucial for small object detection. Wavelet Convolutions (WTConv) \cite{wtconv} expand receptive fields with logarithmic complexity growth. Adaptive Complex Wavelet Informed Transformer Operators \cite{wavelet-transformer} integrate complex wavelet transforms into Transformers for multi-resolution analysis, showing that frequency domain techniques can be seamlessly integrated into modern architectures.
+More recently, frequency-aware modules have been explored for dense prediction. FDConv observes that candidate dynamic convolution kernels often have highly similar frequency responses, and proposes constructing frequency-diverse weights by allocating parameters to disjoint Fourier indices, together with frequency-band/spatial modulation \cite{fdconv}. Frequency-aware fusion is also studied: FreqFusion explicitly introduces adaptive low-pass/high-pass filtering to improve feature consistency and boundary sharpness during upsampling and fusion \cite{freqfusion}. Wavelet-based approaches provide multi-resolution decomposition with partial spatial localization; WTConv performs convolutions in wavelet sub-bands to scale receptive fields efficiently and can be used as a drop-in layer in CNNs \cite{wtconv}.
+
+While these spectral methods demonstrate that frequency-domain techniques can be integrated into modern architectures, existing designs are often \emph{task- or component-specific} (e.g., classification backbones, fusion-only modules, or specific convolution families), and do not provide a unified, plug-and-play operator that can be instantiated across \emph{backbone, neck, and head} \emph{and} generalize across both CNN- and Transformer-style detectors. Our work fills this gap by introducing a decomposition--reconstruction operator that preserves and re-synthesizes discriminative spectral components with minimal overhead, and systematically validating its cross-architecture generality.
+
+%---------------------
+\section{Method}
+
+\subsection{WDG}
+
+We introduce Wavelet-Difference Gate (WDG), a lightweight plug-and-play bottleneck that injects frequency-aware modulation into convolutional backbones. Given an input feature map $\mathbf{x} \in \mathbb{R}^{C\times H\times W}$, WDG first applies a $1\times 1$ projection to hidden channels $C'=\lfloor eC\rfloor$ (with expansion ratio $e$) and then performs a 2D Haar discrete wavelet transform (DWT) to separate low- and high-frequency components. For simplicity, we describe the transform for even $H,W$; in practice we align sizes by cropping/padding and restore the original resolution after reconstruction.
+
+\noindent\textbf{Projection and wavelet decomposition.}
+We first project $\mathbf{x}$ to a hidden space and decompose it into Haar subbands:
+\begin{equation}
+\label{eq:wdg_proj}
+\begin{aligned}
+\mathbf{x}' &= f_{1\times 1}(\mathbf{x}),\\
+\bigl(\mathbf{x}_{LL},\mathbf{x}_{LH},\mathbf{x}_{HL},\mathbf{x}_{HH}\bigr) &= \mathrm{DWT}(\mathbf{x}').
+\end{aligned}
+\end{equation}
+Here $\mathbf{x}_{LL}$ is the low-frequency approximation, and $\{\mathbf{x}_{LH},\mathbf{x}_{HL},\mathbf{x}_{HH}\}$ capture horizontal/vertical/diagonal high-frequency details.
+This decomposition explicitly separates coarse structures from fine details, enabling targeted refinement for small objects.
+
+For Haar DWT/IDWT, each spatial $2\times 2$ block is transformed by a $2\times 2$ Haar matrix. For each channel $c$ and location $(u,v)$, define the local block
+\begin{equation}
+\label{eq:haar_block}
+\mathbf{X}^{(c)}_{u,v} = \begin{pmatrix}
+\mathbf{x}'^{(c)}_{2u,2v} & \mathbf{x}'^{(c)}_{2u,2v+1}\\
+\mathbf{x}'^{(c)}_{2u+1,2v} & \mathbf{x}'^{(c)}_{2u+1,2v+1}
+\end{pmatrix}.
+\end{equation}
+Then Haar DWT and IDWT are given by
+\begin{equation}
+\label{eq:haar_dwt_idwt}
+\begin{aligned}
+\mathbf{S}^{(c)}_{u,v} &= \tfrac{1}{2}\,\mathbf{H}_2\,\mathbf{X}^{(c)}_{u,v}\,\mathbf{H}_2^{\top},\\
+\mathbf{X}^{(c)}_{u,v} &= \tfrac{1}{2}\,\mathbf{H}_2^{\top}\,\mathbf{S}^{(c)}_{u,v}\,\mathbf{H}_2,\qquad
+\mathbf{H}_2 = \begin{pmatrix} 1 & 1\\ 1 & -1 \end{pmatrix},
+\end{aligned}
+\end{equation}
+where $\mathbf{S}^{(c)}_{u,v}=\begin{pmatrix}\mathbf{x}^{(c)}_{LL,u,v} & \mathbf{x}^{(c)}_{LH,u,v}\\ \mathbf{x}^{(c)}_{HL,u,v} & \mathbf{x}^{(c)}_{HH,u,v}\end{pmatrix}$ collects the four subbands. This matrix form is exactly equivalent to the element-wise expressions used in our implementation.
+
+\noindent\textbf{RepCDC for low-frequency refinement.}
+To enhance discriminative edges while keeping computation low, we refine the approximation subband at half resolution:
+\begin{equation}
+\label{eq:wdg_cdc}
+\mathbf{y}_{LL} = f_{\mathrm{cdc}}(\mathbf{x}_{LL}).
+\end{equation}
+In our implementation, $f_{\mathrm{cdc}}$ is RepCDC followed by normalization and activation. RepCDC parameterizes a central-difference convolution by decreasing the center coefficient of a $3\times 3$ kernel with a learnable $\boldsymbol{\theta}$. Concretely, the effective kernel is
+\begin{equation}
+\label{eq:wdg_repcdc}
+\mathbf{y}^{(o)}_{p,q} = \sum_{c}\sum_{i=-1}^{1}\sum_{j=-1}^{1} \mathbf{W}^{(o,c)}_{i,j}\,\mathbf{z}^{(c)}_{p+i,q+j} \, - \, \sum_{c} \boldsymbol{\theta}^{(o,c)}\,\mathbf{z}^{(c)}_{p,q},
+\end{equation}
+where $\mathbf{z}$ denotes the input to RepCDC (e.g., $\mathbf{z}=\mathbf{x}_{LL}$), and $(p,q)$ indexes spatial locations. This expression is exactly equivalent to subtracting $\boldsymbol{\theta}$ from the center coefficient of a $3\times 3$ kernel. During deployment, the resulting kernel is fused into a single standard convolution, so RepCDC incurs no extra inference branches.
+Operating on $\mathbf{x}_{LL}$ reduces spatial cost by $4\times$ while strengthening edge sensitivity through the difference term.
+
+\noindent\textbf{High-frequency gated modulation.}
+We use high-frequency responses to predict a content-adaptive gate and modulate the refined low-frequency feature:
+\begin{equation}
+\label{eq:wdg_gate}
+\begin{aligned}
+\mathbf{g} &= \sigma\Bigl(f_{g}(\operatorname{Concat}(\mathbf{x}_{LH},\mathbf{x}_{HL},\mathbf{x}_{HH}))\Bigr),\\
+\widetilde{\mathbf{x}}_{LL} &= \mathbf{y}_{LL} \odot (\mathbf{1}+\mathbf{g}).
+\end{aligned}
+\end{equation}
+We use additive gating $(1+\mathbf{g})$ to emphasize informative regions without suppressing the overall magnitude of $\mathbf{y}_{LL}$. $f_g$ is a $1\times 1$ convolution followed by normalization, and $\operatorname{Concat}(\cdot)$ denotes channel-wise concatenation.
+Since the gate is predicted from high-frequency subbands, it acts as a detail-aware selector that boosts regions with strong edge/texture cues.
+
+\noindent\textbf{Reconstruction and residual output.}
+Finally, we preserve the original high-frequency subbands and reconstruct the feature via inverse Haar transform:
+\begin{equation}
+\label{eq:wdg_recon}
+\begin{aligned}
+\widehat{\mathbf{x}}' &= \mathrm{IDWT}(\widetilde{\mathbf{x}}_{LL},\mathbf{x}_{LH},\mathbf{x}_{HL},\mathbf{x}_{HH}),\\
+\mathbf{y} &= f_{1\times 1}^{\mathrm{out}}(\widehat{\mathbf{x}}').
+\end{aligned}
+\end{equation}
+When input/output channels match, WDG uses a residual connection $\mathbf{y}\leftarrow\mathbf{x}+\mathbf{y}$. Since the wavelet-domain refinement operates on $H/2\times W/2$, WDG adds only a small overhead and can be inserted as a generic bottleneck into different backbone designs.
+Preserving the original high-frequency subbands avoids over-smoothing and helps retain boundary sharpness after reconstruction.
+
+\subsection{LGE and LGE-W}
+
+We next improve the neck by introducing Log-Gabor Enhancer (LGE), a plug-and-play high-frequency refinement module applied to intermediate feature maps before multi-scale fusion. LGE is instantiated per feature level and is agnostic to the specific fusion topology (e.g., FPN/PAN/decoder-style aggregation).
+
+\noindent\textbf{Log-Gabor filter bank (LGF).}
+Given a feature map $\mathbf{x}\in\mathbb{R}^{C\times H\times W}$, LGF applies a fixed Log-Gabor filter bank using depthwise convolutions. Let $K$ and $S$ denote the number of orientations and scales. For each channel $c$, orientation $k$, and scale $s$, we compute
+\begin{equation}
+\label{eq:lgn_lgf}
+\mathbf{h}^{(c)}_{s,k} = \mathbf{x}^{(c)} * \mathbf{g}_{s,k},
+\end{equation}
+where $\mathbf{g}_{s,k}$ is a non-learnable Log-Gabor kernel and $*$ is convolution. This produces a set of directional subband responses that explicitly emphasize edges and fine textures while introducing no additional learnable filter parameters.
+
+\noindent\textbf{Learnable aggregation and residual enhancement (LGE).}
+LGE aggregates the subbands with learnable orientation/scale importance. Let $\boldsymbol{\alpha}\in\mathbb{R}^{S}$ and $\boldsymbol{\beta}\in\mathbb{R}^{K}$ be learnable logits; we obtain normalized weights by softmax and compute the high-frequency summary
+\begin{equation}
+\label{eq:lgn_agg}
+\mathbf{h}^{(c)} = \sum_{s=1}^{S}\sum_{k=1}^{K} \operatorname{softmax}(\boldsymbol{\alpha})_{s}\,\operatorname{softmax}(\boldsymbol{\beta})_{k}\,\mathbf{h}^{(c)}_{s,k}.
+\end{equation}
+We further apply a learnable global scale $\gamma$ (implemented as a sigmoid-gated parameter) and a local mixing operator $f_{\mathrm{mix}}$:
+\begin{equation}
+\label{eq:lgn_out}
+\mathbf{y} = \mathbf{x}_{\mathrm{skip}} + f_{\mathrm{mix}}\bigl(\sigma(\gamma)\,\mathbf{h}\bigr).
+\end{equation}
+Here $\mathbf{x}_{\mathrm{skip}}$ is either the identity mapping (when channels match) or a $1\times 1$ projection. In our implementation, $f_{\mathrm{mix}}$ is a $3\times 3$ convolution (depthwise when $C$ is preserved), making LGE a lightweight residual enhancer that strengthens detail sensitivity prior to subsequent fusion.
+
+\noindent\textbf{Wavelet variant (LGE-W).}
+LGE-W follows the same LGF decomposition and aggregation in Eq.~\eqref{eq:lgn_lgf}--\eqref{eq:lgn_out}, but replaces $f_{\mathrm{mix}}$ with a wavelet-transform convolution (WTConv) when the input/output channels match. This variant injects multi-resolution wavelet-domain mixing with minimal architectural intrusion; when channel dimensions do not match, we fall back to the standard $3\times 3$ convolution for stability.
+
+%---------------------
+\section{Experiment}
+\subsection{Datasets and Metrics}
+We evaluate our framework on four benchmarks to demonstrate its robustness and cross-domain generalization: VisDrone2019 \cite{du2019visdrone}, TinyPerson \cite{yu2020scale}, UAVDT \cite{du2018unmanned}, and DOTA v1 \cite{xia2018dota}. \textbf{VisDrone2019} is our primary benchmark and is particularly challenging due to dense small objects and severe scale variation, where most targets are smaller than $50 \times 50$ pixels.
+
+We report both accuracy and efficiency, including mAP$_{50}$, the number of parameters, GFLOPs, model size, and FPS.
+
+\subsection{Configuration}
+The experimental configuration is detailed in Table \ref{tab:config}.
+
+% --- 表格部分 (保持不变) ---
+\begin{table}[ht]
+    \centering
+    \caption{\textbf{Configuration of Training and Testing Experiment Environments.} Detailed hardware and software configuration used for all experiments in this study.}
+    \label{tab:config}
+    \vspace{0.2cm} 
+    
+    \begin{tabular}{ll} 
+        \toprule
+        \textbf{Environment} & \textbf{Parameter} \\
+        \midrule
+        CPU              & Intel(R) Xeon(R) Gold 5218R CPU @ 2.10GHz \\
+        GPU              & NVIDIA A100-PCIE-40GB \\
+        VRAM             & 40 GB \\
+        RAM              & 46 GB \\
+        Operating System & Rocky Linux 8.5 (Green Obsidian) \\
+        Language         & Python 3.10.14 \\
+        Frame            & PyTorch 2.1.0 \\
+        CUDA Version     & 12.6 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+%这个表格需要调整大小/格式
+For YOLO-style architectures, models are trained for 300 epochs with an input resolution of $640 \times 640$ and batch size 16, using SGD optimization. Unless otherwise specified, Mosaic augmentation is enabled throughout training; we use 4 dataloader workers and disable AMP.
+%其他的架构还没写
 
 
+%---------------------
+\section{Main Results}
+
+
+
+
+%---------------------
+\section{Analyses and Discussion}
+
+
+
+
+%---------------------
+\section{Conclusion}
+
+
+
+
+
+
+
+
+
+
+%---------------------
 \bibliography{example_paper}
 \bibliographystyle{icml2026}
 

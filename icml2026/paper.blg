@@ -3,44 +3,47 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: paper.aux
 The style file: icml2026.bst
 Database file #1: example_paper.bib
+Warning--I didn't find a database entry for "fcanet"
+Warning--I didn't find a database entry for "freqfusion"
 You've used 18 entries,
             2773 wiz_defined-function locations,
-            696 strings with 8989 characters,
-and the built_in function-call counts, 11538 in all, are:
-= -- 938
-> -- 1037
-< -- 6
-+ -- 346
-- -- 327
-* -- 1054
-:= -- 1841
-add.period$ -- 63
+            695 strings with 9139 characters,
+and the built_in function-call counts, 12270 in all, are:
+= -- 995
+> -- 1099
+< -- 9
++ -- 366
+- -- 348
+* -- 1097
+:= -- 1918
+add.period$ -- 58
 call.type$ -- 18
-change.case$ -- 161
-chr.to.int$ -- 17
+change.case$ -- 167
+chr.to.int$ -- 18
 cite$ -- 36
-duplicate$ -- 422
-empty$ -- 702
-format.name$ -- 347
-if$ -- 2354
-int.to.chr$ -- 2
+duplicate$ -- 459
+empty$ -- 752
+format.name$ -- 368
+if$ -- 2531
+int.to.chr$ -- 1
 int.to.str$ -- 1
 missing$ -- 18
-newline$ -- 104
+newline$ -- 100
 num.names$ -- 74
-pop$ -- 326
+pop$ -- 355
 preamble$ -- 1
-purify$ -- 143
+purify$ -- 149
 quote$ -- 0
-skip$ -- 370
+skip$ -- 421
 stack$ -- 0
-substring$ -- 246
-swap$ -- 63
-text.length$ -- 5
+substring$ -- 297
+swap$ -- 91
+text.length$ -- 8
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 198
 warning$ -- 0
-while$ -- 71
+while$ -- 78
 width$ -- 0
-write$ -- 247
+write$ -- 239
+(There were 2 warnings)

@@ -5,10 +5,8 @@
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Carion et~al.(2020)Carion, Massa, Synnaeve, Usunier, Kirillov, and
-  Zagoruyko]{detr}
-Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., and Zagoruyko,
-  S.
+\bibitem[Carion et~al.(2020)Carion, Massa, Synnaeve, Usunier, Kirillov, and Zagoruyko]{detr}
+Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., and Zagoruyko, S.
 \newblock End-to-end object detection with transformers.
 \newblock \emph{arXiv preprint arXiv:2005.12872}, 2020.
 
@@ -17,12 +15,20 @@ Chen, L., Gu, L., Li, L., Yan, C., and Fu, Y.
 \newblock Frequency dynamic convolution for dense image prediction.
 \newblock \emph{arXiv preprint arXiv:2503.18783}, 2025.
 
+\bibitem[Du et~al.(2018)Du, Qi, Yu, Yang, Duan, Li, Zhang, Huang, and Tian]{du2018unmanned}
+Du, D., Qi, Y., Yu, H., Yang, Y., Duan, K., Li, G., Zhang, W., Huang, Q., and Tian, Q.
+\newblock The unmanned aerial vehicle benchmark: Object detection and tracking.
+\newblock In \emph{Proceedings of the European Conference on Computer Vision (ECCV)}, pp.\  370--386, 2018.
+
+\bibitem[Du et~al.(2019)Du, Zhu, Wen, Bian, Lin, Hu, Peng, Zheng, Wang, Zhang, et~al.]{du2019visdrone}
+Du, D., Zhu, P., Wen, L., Bian, X., Lin, H., Hu, Q., Peng, T., Zheng, J., Wang, X., Zhang, Y., et~al.
+\newblock Visdrone-det2019: The vision meets drone object detection in image challenge results.
+\newblock In \emph{Proceedings of the IEEE/CVF International Conference on Computer Vision Workshops}, pp.\  0--0, 2019.
+
 \bibitem[Finder et~al.(2025)Finder, Amoyal, Treister, and Freifeld]{wtconv}
 Finder, S.~E., Amoyal, R., Treister, E., and Freifeld, O.
 \newblock Wavelet convolutions for large receptive fields.
-\newblock In Leonardis, A., Ricci, E., Roth, S., Russakovsky, O., Sattler, T.,
-  and Varol, G. (eds.), \emph{Computer Vision -- ECCV 2024}, pp.\  363--380,
-  Cham, 2025. Springer Nature Switzerland.
+\newblock In Leonardis, A., Ricci, E., Roth, S., Russakovsky, O., Sattler, T., and Varol, G. (eds.), \emph{Computer Vision -- ECCV 2024}, pp.\  363--380, Cham, 2025. Springer Nature Switzerland.
 \newblock ISBN 978-3-031-72949-2.
 
 \bibitem[Khanam \& Hussain(2024)Khanam and Hussain]{yolov11}
@@ -30,60 +36,31 @@ Khanam, R. and Hussain, M.
 \newblock {YOLOv11}: An overview of the key architectural enhancements.
 \newblock \emph{arXiv preprint arXiv:2410.17725}, 2024.
 
-\bibitem[Li et~al.(2025)Li, Jiao, Liu, Yang, Zhu, Liu, Li, and
-  Ma]{wavelet-transformer}
-Li, X., Jiao, L., Liu, F., Yang, S., Zhu, H., Liu, X., Li, L., and Ma, W.
-\newblock Adaptive complex wavelet informed transformer operator.
-\newblock \emph{IEEE Transactions on Multimedia}, 27:\penalty0 3513--3526,
-  2025.
-\newblock \doi{10.1109/TMM.2025.3535392}.
-
-\bibitem[Lin et~al.(2017)Lin, Doll{\'a}r, Girshick, He, Hariharan, and
-  Belongie]{fpn}
-Lin, T.-Y., Doll{\'a}r, P., Girshick, R., He, K., Hariharan, B., and Belongie,
-  S.
+\bibitem[Lin et~al.(2017)Lin, Doll{\'a}r, Girshick, He, Hariharan, and Belongie]{fpn}
+Lin, T.-Y., Doll{\'a}r, P., Girshick, R., He, K., Hariharan, B., and Belongie, S.
 \newblock Feature pyramid networks for object detection.
-\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and
-  Pattern Recognition (CVPR)}, pp.\  2117--2125, 2017.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, pp.\  2117--2125, 2017.
 
-\bibitem[Liu et~al.(2016)Liu, Anguelov, Erhan, Szegedy, Reed, Fu, and
-  Berg]{ssd}
-Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.-Y., and Berg,
-  A.~C.
+\bibitem[Liu et~al.(2016)Liu, Anguelov, Erhan, Szegedy, Reed, Fu, and Berg]{ssd}
+Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.-Y., and Berg, A.~C.
 \newblock {SSD}: Single shot multibox detector.
-\newblock In \emph{Computer Vision--ECCV 2016: 14th European Conference,
-  Amsterdam, The Netherlands, October 11-14, 2016, Proceedings, Part I}, pp.\
-  21--37. Springer, 2016.
+\newblock In \emph{Computer Vision--ECCV 2016: 14th European Conference, Amsterdam, The Netherlands, October 11-14, 2016, Proceedings, Part I}, pp.\  21--37. Springer, 2016.
 
 \bibitem[Rao et~al.(2023)Rao, Zhao, Zhu, Zhou, and Lu]{gfnet}
 Rao, Y., Zhao, W., Zhu, Z., Zhou, J., and Lu, J.
 \newblock {GFNet}: Global filter networks for visual recognition.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence
-  (TPAMI)}, 45\penalty0 (9):\penalty0 10960--10973, September 2023.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)}, 45\penalty0 (9):\penalty0 10960--10973, September 2023.
 \newblock \doi{10.1109/TPAMI.2023.3263824}.
 
 \bibitem[Ren et~al.(2015)Ren, He, Girshick, and Sun]{fasterrcnn}
 Ren, S., He, K., Girshick, R., and Sun, J.
-\newblock Faster {R-CNN}: Towards real-time object detection with region
-  proposal networks.
-\newblock In \emph{Advances in Neural Information Processing Systems
-  (NeurIPS)}, volume~28, 2015.
+\newblock Faster {R-CNN}: Towards real-time object detection with region proposal networks.
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)}, volume~28, 2015.
 
-\bibitem[Shi et~al.(2025)Shi, Hu, Ren, Ye, Yuan, Ouyang, He, Ji, and
-  Guo]{hs-fpn}
-Shi, Z., Hu, J., Ren, J., Ye, H., Yuan, X., Ouyang, Y., He, J., Ji, B., and
-  Guo, J.
-\newblock {HS-FPN}: High frequency and spatial perception fpn for tiny object
-  detection.
+\bibitem[Shi et~al.(2025)Shi, Hu, Ren, Ye, Yuan, Ouyang, He, Ji, and Guo]{hs-fpn}
+Shi, Z., Hu, J., Ren, J., Ye, H., Yuan, X., Ouyang, Y., He, J., Ji, B., and Guo, J.
+\newblock {HS-FPN}: High frequency and spatial perception fpn for tiny object detection.
 \newblock \emph{arXiv preprint arXiv:2412.10116}, 2025.
-
-\bibitem[Tang et~al.(2025)Tang, Nian, Ding, Ma, Quan, Dong, Yang, Liu, and
-  Zhou]{mobileuvit}
-Tang, F., Nian, B., Ding, J., Ma, W., Quan, Q., Dong, C., Yang, J., Liu, W.,
-  and Zhou, S.~K.
-\newblock {Mobile U-ViT}: Revisiting large kernel and {U}-shaped vit for
-  efficient medical image segmentation.
-\newblock \emph{arXiv preprint arXiv:2508.01064}, 2025.
 
 \bibitem[Wang et~al.(2024)Wang, Chen, Liu, Chen, Lin, Han, and Ding]{yolov10}
 Wang, A., Chen, H., Liu, L., Chen, K., Lin, Z., Han, J., and Ding, G.
@@ -93,40 +70,29 @@ Wang, A., Chen, H., Liu, L., Chen, K., Lin, Z., Han, J., and Ding, G.
 \bibitem[Wang et~al.(2025)Wang, Chen, Lin, Han, and Ding]{lsnet}
 Wang, A., Chen, H., Lin, Z., Han, J., and Ding, G.
 \newblock {LSNet}: See large, focus small.
-\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
-  and Pattern Recognition (CVPR)}, 2025.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 2025.
+
+\bibitem[Xia et~al.(2018)Xia, Bai, Ding, Zhu, Belongie, Luo, Datcu, Pelillo, and Zhang]{xia2018dota}
+Xia, G.-S., Bai, X., Ding, J., Zhu, Z., Belongie, S., Luo, J., Datcu, M., Pelillo, M., and Zhang, L.
+\newblock Dota: A large-scale dataset for object detection in aerial images.
+\newblock In \emph{Proceedings of the IEEE conference on computer vision and pattern recognition}, pp.\  3974--3983, 2018.
 
 \bibitem[Xiao et~al.(2025)Xiao, Xu, Xin, and Li]{fbrt-yolo}
 Xiao, Y., Xu, T., Xin, Y., and Li, J.
 \newblock {FBRT-YOLO}: Faster and better for real-time aerial image detection.
 \newblock \emph{arXiv preprint arXiv:2504.20670}, 2025.
 
-\bibitem[Xu et~al.(2023)Xu, Liao, Zhang, Li, He, and Wu]{haar}
-Xu, G., Liao, W., Zhang, X., Li, C., He, X., and Wu, X.
-\newblock Haar wavelet downsampling: A simple but effective downsampling module
-  for semantic segmentation.
-\newblock \emph{Pattern Recognition}, 143:\penalty0 109819, 2023.
-\newblock ISSN 0031-3203.
-\newblock \doi{https://doi.org/10.1016/j.patcog.2023.109819}.
-\newblock URL
-  \url{https://www.sciencedirect.com/science/article/pii/S0031320323005174}.
+\bibitem[Yu et~al.(2020)Yu, Gong, Jiang, Ye, and Han]{yu2020scale}
+Yu, X., Gong, Y., Jiang, N., Ye, Q., and Han, Z.
+\newblock Scale match for tiny person detection.
+\newblock In \emph{Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision}, pp.\  1257--1265, 2020.
 
-\bibitem[Zhang et~al.(2022{\natexlab{a}})Zhang, Li, Liu, Zhang, Su, Zhu, Ni,
-  and Shum]{dino}
-Zhang, H., Li, F., Liu, S., Zhang, L., Su, H., Zhu, J., Ni, L.~M., and Shum,
-  H.-Y.
-\newblock {DINO}: {DETR} with improved denoising anchor boxes for end-to-end
-  object detection.
-\newblock \emph{arXiv preprint arXiv:2203.03605}, 2022{\natexlab{a}}.
+\bibitem[Zhang et~al.(2022)Zhang, Li, Liu, Zhang, Su, Zhu, Ni, and Shum]{dino}
+Zhang, H., Li, F., Liu, S., Zhang, L., Su, H., Zhu, J., Ni, L.~M., and Shum, H.-Y.
+\newblock {DINO}: {DETR} with improved denoising anchor boxes for end-to-end object detection.
+\newblock \emph{arXiv preprint arXiv:2203.03605}, 2022.
 
-\bibitem[Zhang et~al.(2022{\natexlab{b}})Zhang, Zeng, Guo, and Zhang]{elan}
-Zhang, X., Zeng, H., Guo, S., and Zhang, L.
-\newblock Efficient long-range attention network for image super-resolution.
-\newblock In \emph{European Conference on Computer Vision}, pp.\  649--667.
-  Springer, 2022{\natexlab{b}}.
-
-\bibitem[Zhao et~al.(2024)Zhao, Lv, Xu, Wei, Wang, Dang, Liu, and
-  Chen]{rt-detr}
+\bibitem[Zhao et~al.(2024)Zhao, Lv, Xu, Wei, Wang, Dang, Liu, and Chen]{rt-detr}
 Zhao, Y., Lv, W., Xu, S., Wei, J., Wang, G., Dang, Q., Liu, Y., and Chen, J.
 \newblock Detrs beat yolos on real-time object detection.
 \newblock \emph{arXiv preprint arXiv:2304.08069}, 2024.
