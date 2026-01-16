@@ -164,6 +164,50 @@ While these spectral methods demonstrate that frequency-domain techniques can be
 %---------------------
 \section{Method}
 
+\subsection{Overall Framework}
+
+Small objects occupy few pixels and are therefore dominated by high spatial frequencies (edges and fine textures). However, in modern detectors these components are progressively attenuated: backbone downsampling behaves as an implicit low-pass operator, neck fusion/upsampling further smooths boundaries, and the head's regression gradients weaken once boundary evidence is diluted. Our key observation is that these three failure modes can be addressed by a single frequency-domain principle: \emph{decompose features into low/high-frequency components, selectively enhance them, and reconstruct (or inject) the enhanced signal}.
+
+\noindent\textbf{Unified decompose--enhance--reconstruct (DER) operator.}
+Given a feature tensor $\mathbf{X}\in\mathbb{R}^{C\times H\times W}$, we define
+\begin{equation}
+\label{eq:overall_hf_inject}
+\begin{aligned}
+(\mathbf{X}_{L},\mathbf{X}_{H}) &= \mathcal{D}(\mathbf{X}),\\
+\mathbf{X}_{L}^{+} &= \mathcal{E}_{L}(\mathbf{X}_{L}),\qquad \mathbf{X}_{H}^{+} = \mathcal{E}_{H}(\mathbf{X}_{H}),\\
+\mathbf{X}^{+} &= \mathcal{R}(\mathbf{X}_{L}^{+},\mathbf{X}_{H}^{+}),
+\end{aligned}
+\end{equation}
+where $\mathcal{D}$ extracts low-/high-frequency evidence (wavelet subbands or oriented band-pass responses), $\mathcal{E}_{L}$ and $\mathcal{E}_{H}$ are lightweight enhancement functions, and $\mathcal{R}$ reconstructs or injects the enhanced signal back to the spatial feature stream.
+
+This DER operator is instantiated at three locations with complementary roles along the detector pipeline and forms a coherent frequency flow: WDG performs DER early so that boundary-relevant $\mathbf{X}_{H}$ is not prematurely suppressed and can be propagated to the neck; LGE/LGE-W applies DER again \emph{before} multi-scale fusion so that the enhanced high-frequency residual survives aggregation; FDHead finally converts the resulting high-frequency energy into a regression gain, making the localization head sensitive to boundary evidence that has been preserved and re-amplified upstream.
+
+\noindent\textbf{DER instantiations across backbone/neck/head.}
+In our implementation, the three modules correspond to Eq.~\eqref{eq:overall_hf_inject} with different choices of $\mathcal{D}$, $\mathcal{E}_{L/H}$, and $\mathcal{R}$:
+\begin{equation}
+\label{eq:der_instances}
+\begin{aligned}
+\text{WDG:}\ & \mathcal{D}=\mathrm{DWT},\ \mathcal{E}_{L}=f_{\mathrm{cdc}},\ \mathcal{E}_{H}=\mathrm{Id},\ \mathcal{R}=\mathrm{IDWT};\\
+\text{LGE/LGE-W:}\ & \mathcal{D}=\mathrm{LGF\ (or\ DWT)},\ \mathcal{E}_{H}:\eqref{eq:lgn_agg},\ \mathcal{R}:\eqref{eq:lgn_out},\ \text{(or}\ \eqref{eq:lgew_wtconv}\text{)};\\
+\text{FDHead:}\ & \mathcal{D}=\mathrm{DWT},\ \mathcal{R}:\eqref{eq:fdhead_hfgate}\rightarrow\eqref{eq:fdhead_pred}.
+\end{aligned}
+\end{equation}
+This shared DER view clarifies why the three changes are not independent: they progressively preserve, re-inject, and exploit the same high-frequency evidence across backbone--neck--head.
+
+Formally, given a baseline detector with backbone $\mathcal{B}$, neck $\mathcal{N}$, and head $\mathcal{H}$, we instantiate the three operators as
+\begin{equation}
+\label{eq:overall_pipeline}
+\begin{aligned}
+\{\mathbf{C}_\ell\} &= \mathcal{B}(\mathbf{I}),\qquad \mathbf{C}'_\ell = \begin{cases}
+\mathcal{W}(\mathbf{C}_\ell), & \ell\in\mathcal{S}_\mathcal{B},\\
+\mathbf{C}_\ell, & \text{otherwise},
+\end{cases}\\
+\{\mathbf{P}_\ell\} &= \mathcal{N}(\{\mathbf{C}'_\ell\}),\qquad \mathbf{P}'_\ell = \mathcal{E}(\mathbf{P}_\ell),\\
+\widehat{\mathbf{Y}} &= \mathcal{H}_{\mathrm{FD}}(\{\mathbf{P}'_\ell\}).
+\end{aligned}
+\end{equation}
+Here $\mathcal{W}$, $\mathcal{E}$, and $\mathcal{H}_{\mathrm{FD}}$ are the concrete DER instantiations for backbone, neck, and head, respectively. $\mathcal{S}_\mathcal{B}$ denotes the set of backbone stages where WDG is inserted.
+
 \subsection{Wavelet-Difference Gate (WDG)}
 
 We introduce Wavelet-Difference Gate (WDG), a lightweight plug-and-play bottleneck that injects frequency-aware modulation into convolutional backbones. Given an input feature map $\mathbf{x} \in \mathbb{R}^{C\times H\times W}$, WDG first applies a $1\times 1$ projection to hidden channels $C'=\lfloor eC\rfloor$ (with expansion ratio $e$) and then performs a 2D Haar discrete wavelet transform (DWT) to separate low- and high-frequency components. For simplicity, we describe the transform for even $H,W$; in practice we align sizes by cropping/padding and restore the original resolution after reconstruction.
@@ -279,20 +323,25 @@ LGE-W follows Eq.~\eqref{eq:lgn_lgf}--\eqref{eq:lgn_out} but replaces $f_{\mathr
  \mathrm{WTConv}(\mathbf{z}) = \mathcal{S}_0\,\mathcal{D}_0(\mathbf{z}) + \mathrm{IDWT}\!\left(\mathcal{S}\,\mathcal{D}_{4}\bigl(\mathrm{DWT}(\mathbf{z})\bigr)\right),
  \end{equation}
  where $\mathcal{D}_0$ is a depthwise convolution in the spatial domain and $\mathcal{D}_{4}$ denotes grouped depthwise convolutions applied over the four wavelet subbands.
-
+@@
  \subsection{Frequency-Driven Head (FDHead)}
  
- We finally introduce Frequency-Driven Head (FDHead), a frequency-aware detection head that enhances localization sensitivity to fine boundaries while keeping the standard dense prediction interface. FDHead is instantiated over multi-scale feature maps $\{\mathbf{x}_i\}_{i=1}^{N}$ (e.g., $P2$--$P5$) and uses a shared prediction tower to reduce parameters.
+ We finally introduce Frequency-Driven Head (FDHead), a frequency-aware detection head that improves small-object localization by injecting a boundary-sensitive prior into dense regression while preserving the standard anchor-free interface. FDHead is instantiated over multi-scale feature maps $\{\mathbf{x}_i\}_{i=1}^{N}$ (e.g., $P2$--$P5$) and shares most head parameters across levels to reduce capacity fragmentation.
  
  \noindent\textbf{Shared prediction tower.}
- For each level $i$, FDHead first aligns channels to a hidden width $C_h$ (Conv+GroupNorm) and then applies a shared refinement stack (DEConv + depthwise--pointwise mixing). The DEConv block merges several directional-difference filters into a single re-parameterized convolution, which biases the tower toward edge/contour responses important for small objects:
+ For each level $i$, FDHead first aligns channels to a hidden width $C_h$ (Conv+GroupNorm) and then applies a shared refinement stack (DEConv + depthwise--pointwise mixing). The DEConv block aggregates multiple directional-difference operators (center/adjacent/horizontal/vertical) and a standard kernel; at inference it can be written as a single convolution with merged weights:
+ \begin{equation}
+ \label{eq:fdhead_deconv}
+ \mathrm{DEConv}(\mathbf{u}) = \varphi\Bigl(\bigl(\sum_{m} \mathbf{K}_{m}\bigr) * \mathbf{u} + \sum_{m}\mathbf{b}_{m}\Bigr),
+ \end{equation}
+ where $m$ indexes the directional branches and $\varphi(\cdot)$ denotes normalization and activation. This biases the shared tower toward contour-aware features that are beneficial for boundary-aligned regression.
  \begin{equation}
  \label{eq:fdhead_shared}
  \mathbf{f}_i = \mathcal{T}(\mathbf{x}_i),\qquad \mathcal{T}=\mathcal{T}_{\mathrm{share}}\circ \mathcal{T}_{1\times 1}.
  \end{equation}
  
  \noindent\textbf{P2 high-frequency gate.}
- Since the finest level ($P2$) carries the most precise spatial details, FDHead applies a lightweight wavelet gate only on $i=1$ (corresponding to $P2$). We split channels $\mathbf{f}_1=[\mathbf{f}_a,\mathbf{f}_b]$ where $\mathbf{f}_a$ keeps a small frequency-aware subset and $\mathbf{f}_b$ bypasses unchanged. We then estimate high-frequency energy from Haar subbands and produce a channel-wise gain:
+ Since the finest level ($P2$) carries the most precise spatial details, FDHead applies a lightweight wavelet gate only on $i=1$ (corresponding to $P2$). Let $C_f$ be the gated channel width (set as a fraction of $C_h$); we split channels $\mathbf{f}_1=[\mathbf{f}_a,\mathbf{f}_b]$ with $\mathbf{f}_a\in\mathbb{R}^{C_f\times H\times W}$. Using a fixed Haar transform, we estimate high-frequency energy as a softmax-weighted mixture of subband magnitudes and convert it to a channel-wise gain:
  \begin{equation}
  \label{eq:fdhead_hfgate}
  \begin{aligned}
@@ -303,7 +352,7 @@ LGE-W follows Eq.~\eqref{eq:lgn_lgf}--\eqref{eq:lgn_out} but replaces $f_{\mathr
  \widetilde{\mathbf{f}}_a &= \mathbf{f}_a\odot\bigl(1+\alpha\,\mathbf{g}\bigr).
  \end{aligned}
  \end{equation}
- where $\mathrm{Gate}(\cdot)$ is a small channel MLP implemented by $1\times 1$ convs with sigmoid output. We then form $\widetilde{\mathbf{f}}_1=[\widetilde{\mathbf{f}}_a,\mathbf{f}_b]$ and apply it only to the box branch: high-frequency cues mainly sharpen boundary-aligned localization, while keeping the classification stream unchanged avoids amplifying texture noise.
+ Here $\boldsymbol{\omega}$ are learnable logits over $\{LH,HL,HH\}$ and $\alpha$ controls the gate strength. $\mathrm{Gate}(\cdot)$ is a squeeze-excitation style channel MLP (two $1\times 1$ convs with sigmoid output) driven by pooled high-frequency energy. We then form $\widetilde{\mathbf{f}}_1=[\widetilde{\mathbf{f}}_a,\mathbf{f}_b]$ and apply it only to the box branch: high-frequency energy is a direct proxy for boundary sharpness and thus improves offset estimation, while leaving the classification stream unchanged avoids over-fitting to textures and background clutter.
  For the remaining levels $i>1$, we set $\widetilde{\mathbf{f}}_i=\mathbf{f}_i$.
  
  \noindent\textbf{Box/class prediction and decoding.}
@@ -355,7 +404,7 @@ For YOLO-style architectures, models are trained for 300 epochs with an input re
 %---------------------
 \section{Main Results}
 
-
+\subsection{Alation }
 
 
 %---------------------
