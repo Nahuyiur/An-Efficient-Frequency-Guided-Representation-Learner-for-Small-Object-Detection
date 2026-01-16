@@ -164,7 +164,7 @@ While these spectral methods demonstrate that frequency-domain techniques can be
 %---------------------
 \section{Method}
 
-\subsection{WDG}
+\subsection{Wavelet-Difference Gate (WDG)}
 
 We introduce Wavelet-Difference Gate (WDG), a lightweight plug-and-play bottleneck that injects frequency-aware modulation into convolutional backbones. Given an input feature map $\mathbf{x} \in \mathbb{R}^{C\times H\times W}$, WDG first applies a $1\times 1$ projection to hidden channels $C'=\lfloor eC\rfloor$ (with expansion ratio $e$) and then performs a 2D Haar discrete wavelet transform (DWT) to separate low- and high-frequency components. For simplicity, we describe the transform for even $H,W$; in practice we align sizes by cropping/padding and restore the original resolution after reconstruction.
 
@@ -237,19 +237,29 @@ Finally, we preserve the original high-frequency subbands and reconstruct the fe
 When input/output channels match, WDG uses a residual connection $\mathbf{y}\leftarrow\mathbf{x}+\mathbf{y}$. Since the wavelet-domain refinement operates on $H/2\times W/2$, WDG adds only a small overhead and can be inserted as a generic bottleneck into different backbone designs.
 Preserving the original high-frequency subbands avoids over-smoothing and helps retain boundary sharpness after reconstruction.
 
-\subsection{LGE and LGE-W}
-
-We next improve the neck by introducing Log-Gabor Enhancer (LGE), a plug-and-play high-frequency refinement module applied to intermediate feature maps before multi-scale fusion. LGE is instantiated per feature level and is agnostic to the specific fusion topology (e.g., FPN/PAN/decoder-style aggregation).
-
-\noindent\textbf{Log-Gabor filter bank (LGF).}
+\subsection{Log-Gabor Enhancer (LGE) and WTConv Variant (LGE-W)}
+ 
+ We next improve the neck by introducing Log-Gabor Enhancer (LGE), a plug-and-play high-frequency refinement module applied to intermediate feature maps before multi-scale fusion. LGE is instantiated per feature level and is agnostic to the specific fusion topology (e.g., FPN/PAN/decoder-style aggregation).
+ 
+ \noindent\textbf{Log-Gabor filter bank (LGF).}
 Given a feature map $\mathbf{x}\in\mathbb{R}^{C\times H\times W}$, LGF applies a fixed Log-Gabor filter bank using depthwise convolutions. Let $K$ and $S$ denote the number of orientations and scales. For each channel $c$, orientation $k$, and scale $s$, we compute
 \begin{equation}
 \label{eq:lgn_lgf}
 \mathbf{h}^{(c)}_{s,k} = \mathbf{x}^{(c)} * \mathbf{g}_{s,k},
 \end{equation}
-where $\mathbf{g}_{s,k}$ is a non-learnable Log-Gabor kernel and $*$ is convolution. This produces a set of directional subband responses that explicitly emphasize edges and fine textures while introducing no additional learnable filter parameters.
-
-\noindent\textbf{Learnable aggregation and residual enhancement (LGE).}
+ where $\mathbf{g}_{s,k}$ is a non-learnable Log-Gabor kernel and $*$ is convolution. In our implementation, $\mathbf{g}_{s,k}$ is instantiated in the spatial domain by rotating a centered coordinate grid and applying a log-normal radial envelope with a cosine angular term:@@
+ \begin{equation}
+ \label{eq:lgn_loggabor}
+ \begin{alignedat}{2}
+ c_k &= \cos\phi_k,\qquad & s_k &= \sin\phi_k,\\
+ u' &= u\,c_k + v\,s_k,\qquad & v' &= -u\,s_k + v\,c_k,\\
+ r &= \sqrt{{u'}^{2}+{v'}^{2}}+\varepsilon,\qquad & \theta &= \mathrm{atan2}(v',u'),\\
+ \mathbf{g}_{s,k}(u,v) &= \exp\!\left(-\frac{\log^{2}(r/\rho_s)}{2\,\log^{2}2}\right)\cos\theta.
+ \end{alignedat}
+ \end{equation}
+ where $\phi_k = k\pi/K$ and $\rho_s$ is a fixed scale parameter. This produces a set of directional subband responses that explicitly emphasize edges and fine textures while introducing no additional learnable filter parameters.
+ 
+ \noindent\textbf{Learnable aggregation and residual enhancement (LGE).}
 LGE aggregates the subbands with learnable orientation/scale importance. Let $\boldsymbol{\alpha}\in\mathbb{R}^{S}$ and $\boldsymbol{\beta}\in\mathbb{R}^{K}$ be learnable logits; we obtain normalized weights by softmax and compute the high-frequency summary
 \begin{equation}
 \label{eq:lgn_agg}
@@ -260,14 +270,54 @@ We further apply a learnable global scale $\gamma$ (implemented as a sigmoid-gat
 \label{eq:lgn_out}
 \mathbf{y} = \mathbf{x}_{\mathrm{skip}} + f_{\mathrm{mix}}\bigl(\sigma(\gamma)\,\mathbf{h}\bigr).
 \end{equation}
-Here $\mathbf{x}_{\mathrm{skip}}$ is either the identity mapping (when channels match) or a $1\times 1$ projection. In our implementation, $f_{\mathrm{mix}}$ is a $3\times 3$ convolution (depthwise when $C$ is preserved), making LGE a lightweight residual enhancer that strengthens detail sensitivity prior to subsequent fusion.
+Here $\mathbf{x}_{\mathrm{skip}}$ is either the identity mapping (when channels match) or a $1\times 1$ projection. In our implementation, $f_{\mathrm{mix}}$ is a $3\times 3$ convolution (depthwise when $C$ is preserved), so LGE adds only local mixing on top of fixed spectral decomposition while keeping a residual pathway.
 
 \noindent\textbf{Wavelet variant (LGE-W).}
-LGE-W follows the same LGF decomposition and aggregation in Eq.~\eqref{eq:lgn_lgf}--\eqref{eq:lgn_out}, but replaces $f_{\mathrm{mix}}$ with a wavelet-transform convolution (WTConv) when the input/output channels match. This variant injects multi-resolution wavelet-domain mixing with minimal architectural intrusion; when channel dimensions do not match, we fall back to the standard $3\times 3$ convolution for stability.
+LGE-W follows Eq.~\eqref{eq:lgn_lgf}--\eqref{eq:lgn_out} but replaces $f_{\mathrm{mix}}$ with a wavelet-transform convolution (WTConv) when $C$ is preserved. Using a fixed wavelet (Haar/\texttt{db1}), WTConv performs subband mixing in the wavelet domain and adds a lightweight depthwise branch:@@
+ \begin{equation}
+ \label{eq:lgew_wtconv}
+ \mathrm{WTConv}(\mathbf{z}) = \mathcal{S}_0\,\mathcal{D}_0(\mathbf{z}) + \mathrm{IDWT}\!\left(\mathcal{S}\,\mathcal{D}_{4}\bigl(\mathrm{DWT}(\mathbf{z})\bigr)\right),
+ \end{equation}
+ where $\mathcal{D}_0$ is a depthwise convolution in the spatial domain and $\mathcal{D}_{4}$ denotes grouped depthwise convolutions applied over the four wavelet subbands.
 
-%---------------------
-\section{Experiment}
-\subsection{Datasets and Metrics}
+ \subsection{Frequency-Driven Head (FDHead)}
+ 
+ We finally introduce Frequency-Driven Head (FDHead), a frequency-aware detection head that enhances localization sensitivity to fine boundaries while keeping the standard dense prediction interface. FDHead is instantiated over multi-scale feature maps $\{\mathbf{x}_i\}_{i=1}^{N}$ (e.g., $P2$--$P5$) and uses a shared prediction tower to reduce parameters.
+ 
+ \noindent\textbf{Shared prediction tower.}
+ For each level $i$, FDHead first aligns channels to a hidden width $C_h$ (Conv+GroupNorm) and then applies a shared refinement stack (DEConv + depthwise--pointwise mixing). The DEConv block merges several directional-difference filters into a single re-parameterized convolution, which biases the tower toward edge/contour responses important for small objects:
+ \begin{equation}
+ \label{eq:fdhead_shared}
+ \mathbf{f}_i = \mathcal{T}(\mathbf{x}_i),\qquad \mathcal{T}=\mathcal{T}_{\mathrm{share}}\circ \mathcal{T}_{1\times 1}.
+ \end{equation}
+ 
+ \noindent\textbf{P2 high-frequency gate.}
+ Since the finest level ($P2$) carries the most precise spatial details, FDHead applies a lightweight wavelet gate only on $i=1$ (corresponding to $P2$). We split channels $\mathbf{f}_1=[\mathbf{f}_a,\mathbf{f}_b]$ where $\mathbf{f}_a$ keeps a small frequency-aware subset and $\mathbf{f}_b$ bypasses unchanged. We then estimate high-frequency energy from Haar subbands and produce a channel-wise gain:
+ \begin{equation}
+ \label{eq:fdhead_hfgate}
+ \begin{aligned}
+ (\mathbf{f}_{LL},\mathbf{f}_{LH},\mathbf{f}_{HL},\mathbf{f}_{HH}) &= \mathrm{DWT}(\mathbf{f}_a),\\
+ \mathbf{w} &= \operatorname{softmax}(\boldsymbol{\omega}),\\
+ \mathbf{h} &= w_{LH}\,|\mathbf{f}_{LH}| + w_{HL}\,|\mathbf{f}_{HL}| + w_{HH}\,|\mathbf{f}_{HH}|,\\
+ \mathbf{g} &= \mathrm{Gate}\bigl(\operatorname{AvgPool}(\mathbf{h})\bigr),\\
+ \widetilde{\mathbf{f}}_a &= \mathbf{f}_a\odot\bigl(1+\alpha\,\mathbf{g}\bigr).
+ \end{aligned}
+ \end{equation}
+ where $\mathrm{Gate}(\cdot)$ is a small channel MLP implemented by $1\times 1$ convs with sigmoid output. We then form $\widetilde{\mathbf{f}}_1=[\widetilde{\mathbf{f}}_a,\mathbf{f}_b]$ and apply it only to the box branch: high-frequency cues mainly sharpen boundary-aligned localization, while keeping the classification stream unchanged avoids amplifying texture noise.
+ For the remaining levels $i>1$, we set $\widetilde{\mathbf{f}}_i=\mathbf{f}_i$.
+ 
+ \noindent\textbf{Box/class prediction and decoding.}
+ FDHead predicts per-location class logits and distributional box offsets (DFL) as
+ \begin{equation}
+ \label{eq:fdhead_pred}
+ \mathbf{b}_i = \mathrm{Scale}_i\bigl(\mathcal{H}_{\mathrm{box}}(\widetilde{\mathbf{f}}_i)\bigr),\qquad
+ \mathbf{p}_i = \mathcal{H}_{\mathrm{cls}}(\mathbf{f}_i),
+ \end{equation}
+ and decodes boxes by $\widehat{\mathbf{B}}=\mathrm{dist2bbox}(\mathrm{DFL}(\mathbf{b}),\mathbf{A})\cdot\mathbf{s}$ with anchors $\mathbf{A}$ and strides $\mathbf{s}$. This design targets small objects by frequency-gating only the finest level while keeping the remaining head computation shared and lightweight.
+
+ %---------------------
+ \section{Experiment}
+ \subsection{Datasets and Metrics}
 We evaluate our framework on four benchmarks to demonstrate its robustness and cross-domain generalization: VisDrone2019 \cite{du2019visdrone}, TinyPerson \cite{yu2020scale}, UAVDT \cite{du2018unmanned}, and DOTA v1 \cite{xia2018dota}. \textbf{VisDrone2019} is our primary benchmark and is particularly challenging due to dense small objects and severe scale variation, where most targets are smaller than $50 \times 50$ pixels.
 
 We report both accuracy and efficiency, including mAP$_{50}$, the number of parameters, GFLOPs, model size, and FPS.
