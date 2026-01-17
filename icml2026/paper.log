@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.20)  17 JAN 2026 16:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.20)  17 JAN 2026 17:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -730,12 +730,19 @@ File: omlptm.fd
 LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <9> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 121.
 
+Overfull \hbox (0.87093pt too wide) in paragraph at lines 139--140
+\OT1/ptm/m/n/10 (-20) proach, en-cap-su-lated in the \OT1/ptm/b/n/10 (-20) Frequency-guided Decompose--
+ []
 
 
-Package natbib Warning: Citation `fcanet' on page 1 undefined on input line 158.
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 147.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+Underfull \hbox (badness 1163) in paragraph at lines 147--148
+[]\OT1/ptm/m/n/10 (+20) We pro-pose the DER op-er-a-tor, which in-te-grates
+ []
 
 
 
@@ -745,7 +752,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 ]
 
-Package natbib Warning: Citation `freqfusion' on page 2 undefined on input line 160.
+Package natbib Warning: Citation `fcanet' on page 2 undefined on input line 173.
+
+
+Package natbib Warning: Citation `freqfusion' on page 2 undefined on input line 175.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -753,39 +763,40 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 204--205
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 219--220
 []\OT1/ptm/m/n/10 (+20) We in-tro-duce Wavelet-Difference Gate (WDG), a
  []
 
 
-Underfull \hbox (badness 2495) in paragraph at lines 214--217
+Underfull \hbox (badness 2495) in paragraph at lines 229--232
 \OT1/ptm/m/n/10 (+20) Here $\OT1/cmr/bx/n/10 x[]$ \OT1/ptm/m/n/10 (+20) is the low-frequency ap-prox-i-ma-tion, and
  []
 
 
-Underfull \hbox (badness 3019) in paragraph at lines 214--217
+Underfull \hbox (badness 3019) in paragraph at lines 229--232
 \OMS/cmsy/m/n/10 f\OT1/cmr/bx/n/10 x[]\OML/cmm/m/it/10 ; \OT1/cmr/bx/n/10 x[]\OML/cmm/m/it/10 ; \OT1/cmr/bx/n/10 x[]\OMS/cmsy/m/n/10 g$ \OT1/ptm/m/n/10 (+20) cap-ture hor-i-zon-tal/vertical/diagonal
  []
 
 
 
-[2]
 
 
-Overfull \hbox (6.41963pt too wide) detected at line 294
+[3]
+Overfull \hbox (6.41963pt too wide) detected at line 309
 [][][][][][]
  []
 
 
-Underfull \hbox (badness 1199) in paragraph at lines 297--299
+Underfull \hbox (badness 1199) in paragraph at lines 312--314
 \OT1/ptm/m/n/10 (+20) LGE ag-gre-gates the sub-bands with learn-able ori-en-ta-
  []
 
 
 
-[3]
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 311.
- (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 326.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 Package microtype Info: Loading generic protrusion settings for font family
@@ -793,30 +804,29 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-
-
-Overfull \hbox (28.43594pt too wide) detected at line 345
+Overfull \hbox (28.43594pt too wide) detected at line 360
 [][][][][][]
  []
 
 
-Overfull \hbox (54.42038pt too wide) in paragraph at lines 375--389
+
+[4]
+Overfull \hbox (54.42038pt too wide) in paragraph at lines 390--404
  [][] 
  []
 
-
-
-[4] (./paper.bbl
-
-
-
-[5])
+(./paper.bbl
+Underfull \vbox (badness 3049) has occurred while \output is active []
 
 
 
-[6
 
-]
+
+[5]
+
+)
+
+[6]
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
@@ -838,18 +848,18 @@ Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 28207 strings out of 473190
- 523795 string characters out of 5715799
- 939947 words of memory out of 5000000
- 50678 multiletter control sequences out of 15000+600000
- 597519 words of font info for 255 fonts, out of 8000000 for 9000
+ 28244 strings out of 473190
+ 524364 string characters out of 5715799
+ 940947 words of memory out of 5000000
+ 50704 multiletter control sequences out of 15000+600000
+ 598005 words of font info for 260 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,15n,101p,1133b,630s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (7 pages, 247259 bytes).
+Output written on paper.pdf (7 pages, 249514 bytes).
 PDF statistics:
  249 PDF objects out of 1000 (max. 8388607)
  201 compressed objects within 3 object streams
  66 named destinations out of 1000 (max. 500000)
- 57357 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 59405 words of extra memory for PDF output out of 61914 (max. 10000000)
 

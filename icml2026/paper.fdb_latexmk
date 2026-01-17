@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex paper"] 1768639144.9825 "paper.aux" "paper.bbl" "paper" 1768639185.21984 0
+["bibtex paper"] 1768643700.40427 "paper.aux" "paper.bbl" "paper" 1768643742.12767 0
   "./example_paper.bib" 1768573522.76539 10388 01b9c5ee7f508d6f8623de0e576cfc5c ""
   "./icml2026.bst" 1762533924 27147 88eb4aed280e585571f8eac50f39a681 ""
-  "paper.aux" 1768639184.98816 4393 f19888b3e94edfaa905cdeff4999037d "pdflatex"
+  "paper.aux" 1768643741.89746 4393 1871dc2d531ac322caec237f334e3673 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1768639184.33214 "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" "paper.pdf" "paper" 1768639185.21997 0
-  "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" 1768639184.11712 30647 96f0f73a1d3ddb66bdb33c6812be9438 ""
+["pdflatex"] 1768643741.26191 "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" "paper.pdf" "paper" 1768643742.12781 0
+  "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" 1768643741.10871 32898 d9d8adfb94e315a0c40b7b403f1aea3b ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -18,6 +18,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmbi7t.tfm" 1136768653 2228 e564491c42a4540b5ebb710a75ff306c ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmbi8r.tfm" 1136768653 4480 10409ed8bab5aea9ec9a78028b763919 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm" 1136768653 2124 2601a75482e9426d33db523edf23570a ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmr8c.tfm" 1136768653 1352 fa28a7e6d323c65ce7d13d5342ff6be2 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm" 1136768653 4408 25b74d011a4c66b7f212c0cc3c90061b ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm" 1136768653 2288 f478fc8fed18759effb59f3dad7f3084 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm" 1136768653 4640 532ca3305aad10cc01d769f3f91f1029 ""
@@ -68,6 +69,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf" 1136768653 1372 788387fea833ef5963f4c5bffe33eb89 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/vf/adobe/times/ptmbi7t.vf" 1136768653 1384 6ac0f8b839230f5d9389287365b243c0 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf" 1136768653 1380 0ea3a3370054be6da6acd929ec569f06 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/vf/adobe/times/ptmr8c.vf" 1136768653 3556 8a9a6dcbcd146ef985683f677f4758a6 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf" 1136768653 1384 a9d8adaf491ce34e5fba99dc7bbe5f39 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/atbegshi/atbegshi.sty" 1575674566 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
@@ -207,6 +209,7 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1pcr.fd" 1137110629 985 1ed784d7bfe47179f3550d2303b073f8 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1ptm.fd" 1137110629 961 15056f4a61917ceed3a44e4ac11fcc52 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/times.sty" 1586716065 856 8e0e5c8cca7b18e0400f97f5a2b90a99 ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ptm.fd" 1137110629 619 96f56dc5d1ef1fe1121f1cfeec70ee0c ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/refcount/refcount.sty" 1576624809 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657483315 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/todonotes/todonotes.sty" 1704576842 21404 916e19cbd009b6d289c8194b313d3895 ""
@@ -222,10 +225,10 @@
   "algorithmic.sty" 1762533924 7414 ce084815cf0aab483787dbc4bf2ace9c ""
   "fancyhdr.sty" 1762533924 31715 19e60610b63819fe670dfa1cd84a4e94 ""
   "icml2026.sty" 1762533924 27344 8c96f291f57623e81d0a232c8de55616 ""
-  "paper.aux" 1768639184.98816 4393 f19888b3e94edfaa905cdeff4999037d "pdflatex"
-  "paper.bbl" 1768639145.07829 6007 ef5752473c4b741fddfd0f2ce202e1a5 "bibtex paper"
-  "paper.out" 1768639184.78223 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "paper.tex" 1768639184.11712 30647 96f0f73a1d3ddb66bdb33c6812be9438 ""
+  "paper.aux" 1768643741.89746 4393 1871dc2d531ac322caec237f334e3673 "pdflatex"
+  "paper.bbl" 1768643700.48417 6007 ef5752473c4b741fddfd0f2ce202e1a5 "bibtex paper"
+  "paper.out" 1768643741.68456 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "paper.tex" 1768643741.10871 32898 d9d8adfb94e315a0c40b7b403f1aea3b ""
   (generated)
   "paper.aux"
   "paper.log"
