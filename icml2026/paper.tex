@@ -166,47 +166,38 @@ While these spectral methods demonstrate that frequency-domain techniques can be
 
 \subsection{Overall Framework}
 
-Small objects occupy few pixels and are therefore dominated by high spatial frequencies (edges and fine textures). However, in modern detectors these components are progressively attenuated: backbone downsampling behaves as an implicit low-pass operator, neck fusion/upsampling further smooths boundaries, and the head's regression gradients weaken once boundary evidence is diluted. Our key observation is that these three failure modes can be addressed by a single frequency-domain principle: \emph{decompose features into low/high-frequency components, selectively enhance them, and reconstruct (or inject) the enhanced signal}.
+Small object detection is inherently challenging due to the scarcity of spatial information, as small objects occupy few pixels and are dominated by high-frequency cues such as edges and fine textures. However, modern detectors suffer from three key issues: (i) backbone downsampling implicitly acts as a low-pass filter, (ii) multi-scale fusion in the neck smooths boundaries, and (iii) the head’s regression gradients are weakened when boundary information is diluted. 
 
-\noindent\textbf{Unified decompose--enhance--reconstruct (DER) operator.}
-Given a feature tensor $\mathbf{X}\in\mathbb{R}^{C\times H\times W}$, we define
+To address these challenges, we propose a frequency-domain solution based on the principle of \emph{decomposing features into low and high-frequency components, selectively enhancing them, and reconstructing or injecting the enhanced signals back into the feature stream}. This solution can be captured by the \textbf{Frequency-guided Decompose--Enhance--Reconstruct (DER) operator}.
+
+\noindent\textbf{Frequency-guided Decompose--Enhance--Reconstruct (DER) Operator.}  
+Given an input feature tensor $\mathbf{X} \in \mathbb{R}^{C \times H \times W}$, we decompose it into low- and high-frequency components using $\mathcal{D}$, enhance the components via $\mathcal{E}_{L}$ and $\mathcal{E}_{H}$, and finally reconstruct the enhanced features through $\mathcal{R}$:
 \begin{equation}
-\label{eq:overall_hf_inject}
 \begin{aligned}
-(\mathbf{X}_{L},\mathbf{X}_{H}) &= \mathcal{D}(\mathbf{X}),\\
-\mathbf{X}_{L}^{+} &= \mathcal{E}_{L}(\mathbf{X}_{L}),\qquad \mathbf{X}_{H}^{+} = \mathcal{E}_{H}(\mathbf{X}_{H}),\\
-\mathbf{X}^{+} &= \mathcal{R}(\mathbf{X}_{L}^{+},\mathbf{X}_{H}^{+}),
+(\mathbf{X}_{L}, \mathbf{X}_{H}) &= \mathcal{D}(\mathbf{X}), \\
+\mathbf{X}_{L}^{+} &= \mathcal{E}_{L}(\mathbf{X}_{L}), \quad \mathbf{X}_{H}^{+} = \mathcal{E}_{H}(\mathbf{X}_{H}), \\
+\mathbf{X}^{+} &= \mathcal{R}(\mathbf{X}_{L}^{+}, \mathbf{X}_{H}^{+}).
 \end{aligned}
 \end{equation}
-where $\mathcal{D}$ extracts low-/high-frequency evidence (wavelet subbands or oriented band-pass responses), $\mathcal{E}_{L}$ and $\mathcal{E}_{H}$ are lightweight enhancement functions, and $\mathcal{R}$ reconstructs or injects the enhanced signal back to the spatial feature stream.
+Here $\mathcal{D}$ extracts low-/high-frequency components (e.g., via wavelet transforms), $\mathcal{E}_L$ and $\mathcal{E}_H$ are lightweight enhancement functions, and $\mathcal{R}$ reconstructs the enhanced signal back into the feature stream.
 
-This DER operator is instantiated at three locations with complementary roles along the detector pipeline and forms a coherent frequency flow: WDG performs DER early so that boundary-relevant $\mathbf{X}_{H}$ is not prematurely suppressed and can be propagated to the neck; LGE/LGE-W applies DER again \emph{before} multi-scale fusion so that the enhanced high-frequency residual survives aggregation; FDHead finally converts the resulting high-frequency energy into a regression gain, making the localization head sensitive to boundary evidence that has been preserved and re-amplified upstream.
+\noindent\textbf{DER Instantiations Across Backbone, Neck, and Head.}  
+We instantiate DER at three locations with complementary roles: WDG in the backbone preserves boundary-relevant high-frequency evidence before aggressive downsampling; LGE/LGE-W in the neck re-amplifies high-frequency residuals before multi-scale fusion to prevent detail dilution; and FDHead in the head converts high-frequency energy into a gain factor for boundary-aligned box regression. Together, they progressively preserve, enhance, and re-inject high-frequency information with minimal overhead.
 
-\noindent\textbf{DER instantiations across backbone/neck/head.}
-In our implementation, the three modules correspond to Eq.~\eqref{eq:overall_hf_inject} with different choices of $\mathcal{D}$, $\mathcal{E}_{L/H}$, and $\mathcal{R}$:
+\noindent\textbf{Pipeline Overview.}  
+Given a baseline detector with backbone $\mathcal{B}$, neck $\mathcal{N}$, and head $\mathcal{H}$, our framework applies the DER operators as follows:
 \begin{equation}
-\label{eq:der_instances}
 \begin{aligned}
-\text{WDG:}\ & \mathcal{D}=\mathrm{DWT},\ \mathcal{E}_{L}=f_{\mathrm{cdc}},\ \mathcal{E}_{H}=\mathrm{Id},\ \mathcal{R}=\mathrm{IDWT};\\
-\text{LGE/LGE-W:}\ & \mathcal{D}=\mathrm{LGF\ (or\ DWT)},\ \mathcal{E}_{H}:\eqref{eq:lgn_agg},\ \mathcal{R}:\eqref{eq:lgn_out},\ \text{(or}\ \eqref{eq:lgew_wtconv}\text{)};\\
-\text{FDHead:}\ & \mathcal{D}=\mathrm{DWT},\ \mathcal{R}:\eqref{eq:fdhead_hfgate}\rightarrow\eqref{eq:fdhead_pred}.
-\end{aligned}
-\end{equation}
-This shared DER view clarifies why the three changes are not independent: they progressively preserve, re-inject, and exploit the same high-frequency evidence across backbone--neck--head.
-
-Formally, given a baseline detector with backbone $\mathcal{B}$, neck $\mathcal{N}$, and head $\mathcal{H}$, we instantiate the three operators as
-\begin{equation}
-\label{eq:overall_pipeline}
-\begin{aligned}
-\{\mathbf{C}_\ell\} &= \mathcal{B}(\mathbf{I}),\qquad \mathbf{C}'_\ell = \begin{cases}
-\mathcal{W}(\mathbf{C}_\ell), & \ell\in\mathcal{S}_\mathcal{B},\\
+\{\mathbf{C}_\ell\} &= \mathcal{B}(\mathbf{I}), \quad \mathbf{C}'_\ell = \begin{cases} 
+\mathcal{W}(\mathbf{C}_\ell), & \ell \in \mathcal{S}_\mathcal{B}, \\
 \mathbf{C}_\ell, & \text{otherwise},
 \end{cases}\\
-\{\mathbf{P}_\ell\} &= \mathcal{N}(\{\mathbf{C}'_\ell\}),\qquad \mathbf{P}'_\ell = \mathcal{E}(\mathbf{P}_\ell),\\
+\{\mathbf{P}_\ell\} &= \mathcal{N}(\{\mathbf{C}'_\ell\}), \quad \mathbf{P}'_\ell = \mathcal{E}(\mathbf{P}_\ell), \\
 \widehat{\mathbf{Y}} &= \mathcal{H}_{\mathrm{FD}}(\{\mathbf{P}'_\ell\}).
 \end{aligned}
 \end{equation}
-Here $\mathcal{W}$, $\mathcal{E}$, and $\mathcal{H}_{\mathrm{FD}}$ are the concrete DER instantiations for backbone, neck, and head, respectively. $\mathcal{S}_\mathcal{B}$ denotes the set of backbone stages where WDG is inserted.
+Where $\mathcal{W}$, $\mathcal{E}$, and $\mathcal{H}_{\mathrm{FD}}$ represent the concrete DER instantiations for the backbone, neck, and head, respectively, and $\mathcal{S}_\mathcal{B}$ denotes the set of backbone stages where WDG is applied.
+
 
 \subsection{Wavelet-Difference Gate (WDG)}
 
@@ -404,8 +395,11 @@ For YOLO-style architectures, models are trained for 300 epochs with an input re
 %---------------------
 \section{Main Results}
 
-\subsection{Alation }
+\subsection{Ablation Study on YOLO-style architectures}
 
+\subsection{Across-architecture Study}
+
+\subsection{Comparison with State-of-the-art}
 
 %---------------------
 \section{Analyses and Discussion}
