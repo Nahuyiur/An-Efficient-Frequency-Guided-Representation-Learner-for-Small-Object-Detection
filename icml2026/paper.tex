@@ -133,6 +133,21 @@
 
 %---------------------
 \section{Introduction}
+%注意,这个地方introduction基本上是瞎写的,完全没有结合论文内容
+Small object detection remains a significant challenge due to the limited spatial information they occupy in images. These objects are dominated by high-frequency cues such as edges and fine textures. However, modern detectors face three key issues: (i) Backbone downsampling, which acts as a low-pass filter, reduces these high-frequency components; (ii) Multi-scale fusion in the neck further smooths the boundaries; and (iii) The head's regression gradients weaken once boundary evidence is diluted during the detection process. These problems make small-object localization particularly difficult.
+
+To address these challenges, we propose a frequency-guided solution that operates on the principle of \emph{decomposing features into low and high-frequency components, selectively enhancing them, and reconstructing or injecting the enhanced signal back into the feature stream}. This approach, encapsulated in the \textbf{Frequency-guided Decompose--Enhance--Reconstruct (DER) operator}, enables us to effectively preserve, enhance, and exploit high-frequency details across the detection pipeline.
+
+Building on DER, we introduce three lightweight, plug-and-play components that can be inserted into the backbone, neck, and head, respectively.
+
+These modules form a coherent frequency flow across the backbone, neck, and head, addressing the challenges posed by small-object detection with minimal computational overhead. Our method is generalizable across different detector architectures, and we demonstrate its effectiveness through extensive experiments across multiple benchmarks.
+
+\noindent\textbf{Contributions:} We make the following contributions:
+\begin{itemize}
+    \item We propose the DER operator, which integrates frequency-domain decomposition, enhancement, and reconstruction in a unified framework.
+    \item We introduce three novel modules (WDG, LGE, FDHead) that instantiate the DER operator at key locations in the detection pipeline.
+    \item We show that our method improves small-object detection performance while maintaining computational efficiency, and we validate its generalizability across different architectures.
+\end{itemize}
 
 
 
