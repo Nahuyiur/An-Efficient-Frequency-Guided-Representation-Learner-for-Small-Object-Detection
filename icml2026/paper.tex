@@ -7,6 +7,8 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{booktabs} % for professional tables
+\usepackage[table]{xcolor}
+\usepackage{multirow}
 
 % hyperref makes hyperlinks in the resulting PDF.
 % If your build breaks (sometimes temporarily if a hyperlink spans a page)
@@ -17,6 +19,7 @@
 
 % Attempt to make hyperref and algorithmic work together better:
 \newcommand{\theHalgorithm}{\arabic{algorithm}}
+\newcommand{\mapcell}[2]{\makebox[5.2em][l]{#1\if\relax\detokenize{#2}\relax\else\hspace{0.25em}{\fontsize{3.2pt}{3.2pt}\selectfont\textcolor{black}{(}\textcolor{red}{+#2}\textcolor{black}{)}}\fi}}
 
 % Use the following line for the initial blind version submitted for review:
 \usepackage{icml2026}
@@ -411,6 +414,63 @@ For YOLO-style architectures, models are trained for 300 epochs with an input re
 \section{Main Results}
 
 \subsection{Ablation Study on YOLO-style architectures}
+
+
+%------消融表格------
+\begin{table}[t]
+\centering
+Top three performances per metric are highlighted from
+\colorbox[HTML]{FFB366}{Dark} (best) to \colorbox[HTML]{FFE5CC}{Light} (third).
+\setlength\tabcolsep{2pt}
+\renewcommand{\arraystretch}{0.8}
+\fontsize{6pt}{7.5pt}\selectfont
+\resizebox{1\columnwidth}{!}{
+\begin{tabular}{@{}cccc *{6}{c} *{4}{c}@{}}
+\toprule
+\multirow{3}{*}{\tiny\textbf{P2 head}}
+& \multirow{3}{*}{\tiny\textbf{WDG}}
+& \multirow{3}{*}{\tiny\textbf{LGE}}
+& \multirow{3}{*}{\tiny\textbf{FDHead}}
+& \multicolumn{6}{c}{\tiny\textbf{Performance}}
+& \multicolumn{4}{c}{\tiny\textbf{Efficiency}} \\
+\cmidrule(lr){5-10}\cmidrule(lr){11-14}
+& & & & \multicolumn{3}{c}{\tiny\textbf{Val}} & \multicolumn{3}{c}{\tiny\textbf{Test}} & & & & \\
+\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+\rowcolor{blue!5}
+& & & &
+\tiny\textbf{P} & \tiny\textbf{R} & \tiny\textbf{mAP50}
+& \tiny\textbf{P} & \tiny\textbf{R} & \tiny\textbf{mAP50}
+& \tiny\textbf{Params/M} & \tiny\textbf{GFLOPs} & \tiny\textbf{FPS} & \tiny\textbf{Model size/MB} \\
+\midrule
+$\times$ & $\times$ & $\times$ & $\times$
+& 0.496 & 0.377 & \mapcell{0.384}{} & 0.421 & 0.337 & \mapcell{0.311}{} & 9.4 & 21.6 & -- & 18.3 \\
+\checkmark & $\times$ & $\times$ & $\times$
+& 0.516 & 0.408 & \mapcell{0.423}{} & 0.453 & 0.354 & \mapcell{0.337}{} & 6.4 & 24.7 & -- & 12.5 \\
+\checkmark & \checkmark & $\times$ & $\times$
+& 0.543 & 0.420 & \mapcell{0.438}{0.015} & 0.455 & 0.371 & \mapcell{0.354}{0.017} & 6.6 & 23.5 & -- & 13.2 \\
+\checkmark & $\times$ & \checkmark & $\times$
+& 0.547 & 0.412 & \mapcell{0.436}{0.013} & 0.465 & 0.373 & \mapcell{0.355}{0.018} & 6.5 & 25.4 & -- & 12.8 \\
+\checkmark & $\times$ & $\times$ & \checkmark
+& 0.551 & 0.435 & \mapcell{0.454}{0.031} & 0.478 & 0.375 & \mapcell{0.364}{0.027} & 3.8 & 30.5 & -- & 8.4 \\
+\checkmark & \checkmark & \checkmark & $\times$
+& 0.547 & 0.419 & \mapcell{0.445}{0.022} & 0.466 & 0.376 & \mapcell{0.360}{0.023} & 3.9 & 25.5 & -- & 8.2 \\
+\checkmark & \checkmark & $\times$ & \checkmark
+& 0.559 & 0.435 & \mapcell{0.464}{0.041} & 0.487 & 0.383 & \mapcell{0.370}{0.033} & 3.9 & 28.5 & -- & 8.6 \\
+\checkmark & $\times$ & \checkmark & \checkmark
+& 0.549 & 0.437 & \mapcell{0.457}{0.034} & 0.470 & 0.378 & \mapcell{0.365}{0.028} & 3.8 & 28.3 & -- & 8.4 \\
+\checkmark & \checkmark & \checkmark & \checkmark
+& 0.552 & 0.429 & \mapcell{0.458}{0.035} & 0.484 & 0.381 & \mapcell{0.370}{0.033} & 3.8 & 26.3 & -- & 8.6 \\
+\checkmark & \multicolumn{3}{c}{Lite}
+& 0.503 & 0.382 & \mapcell{0.398}{} & 0.420 & 0.344 & \mapcell{0.316}{} & 1.3 & 13.3 & -- & 3.4 \\
+\bottomrule
+\end{tabular}}
+\caption{Ablation study on YOLO-style architectures.}
+\label{tab:ablation}
+\vspace{-1mm}
+\end{table}
+
+
+%-------------------
 
 \subsection{Across-architecture Study}
 
