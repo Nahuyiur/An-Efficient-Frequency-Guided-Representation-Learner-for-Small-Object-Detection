@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex paper"] 1768665591.53494 "paper.aux" "paper.bbl" "paper" 1768676771.48577 0
+["bibtex paper"] 1768750869.74886 "paper.aux" "paper.bbl" "paper" 1768750962.41059 0
   "./example_paper.bib" 1768573522.76539 10388 01b9c5ee7f508d6f8623de0e576cfc5c ""
   "./icml2026.bst" 1762533924 27147 88eb4aed280e585571f8eac50f39a681 ""
-  "paper.aux" 1768676771.24878 4551 86b53747deac09c5b898fac5ecc077bd "pdflatex"
+  "paper.aux" 1768750962.13047 4551 76874231358dd9c99dcfd0f19f4854db "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1768676770.43892 "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" "paper.pdf" "paper" 1768676771.4859 0
-  "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" 1768676770.24666 35860 d8b2901015031fe834be8c3307d46ecf ""
+["pdflatex"] 1768750961.40687 "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" "paper.pdf" "paper" 1768750962.41073 0
+  "/Users/ruiyuhan/Desktop/Frequency-Guided-Representation-Learning-for-Small-Object-Detection-Across-Detector-Architectures/icml2026/paper.tex" 1768750961.23099 36282 7a262cb25ff05beb99d0c7b5c1ba2ec1 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -231,10 +231,10 @@
   "algorithmic.sty" 1762533924 7414 ce084815cf0aab483787dbc4bf2ace9c ""
   "fancyhdr.sty" 1762533924 31715 19e60610b63819fe670dfa1cd84a4e94 ""
   "icml2026.sty" 1762533924 27344 8c96f291f57623e81d0a232c8de55616 ""
-  "paper.aux" 1768676771.24878 4551 86b53747deac09c5b898fac5ecc077bd "pdflatex"
-  "paper.bbl" 1768665591.61712 6007 ef5752473c4b741fddfd0f2ce202e1a5 "bibtex paper"
-  "paper.out" 1768676771.00875 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "paper.tex" 1768676770.24666 35860 d8b2901015031fe834be8c3307d46ecf ""
+  "paper.aux" 1768750962.13047 4551 76874231358dd9c99dcfd0f19f4854db "pdflatex"
+  "paper.bbl" 1768750869.83433 6007 ef5752473c4b741fddfd0f2ce202e1a5 "bibtex paper"
+  "paper.out" 1768750961.90073 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "paper.tex" 1768750961.23099 36282 7a262cb25ff05beb99d0c7b5c1ba2ec1 ""
   (generated)
   "paper.aux"
   "paper.log"

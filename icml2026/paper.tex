@@ -388,20 +388,22 @@ The experimental configuration is detailed in Table \ref{tab:config}.
     \centering
     \caption{\textbf{Configuration of Training and Testing Experiment Environments.} Detailed hardware and software configuration used for all experiments in this study.}
     \label{tab:config}
-    \vspace{0.2cm} 
-    
-    \begin{tabular}{ll} 
+    \vspace{0.1cm} 
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{0.85}
+    \fontsize{7pt}{8pt}\selectfont
+    \begin{tabular}{@{}l p{0.68\columnwidth}@{}} 
         \toprule
         \textbf{Environment} & \textbf{Parameter} \\
         \midrule
-        CPU              & Intel(R) Xeon(R) Gold 5218R CPU @ 2.10GHz \\
-        GPU              & NVIDIA A100-PCIE-40GB \\
-        VRAM             & 40 GB \\
-        RAM              & 46 GB \\
-        Operating System & Rocky Linux 8.5 (Green Obsidian) \\
-        Language         & Python 3.10.14 \\
-        Frame            & PyTorch 2.1.0 \\
-        CUDA Version     & 12.6 \\
+        CPU              & {\fontsize{6.5pt}{7.5pt}\selectfont Intel(R) Xeon(R) Gold 5218R CPU @ 2.10GHz} \\
+        GPU              & {\fontsize{6.5pt}{7.5pt}\selectfont NVIDIA A100-PCIE-40GB} \\
+        VRAM             & {\fontsize{6.5pt}{7.5pt}\selectfont 40 GB} \\
+        RAM              & {\fontsize{6.5pt}{7.5pt}\selectfont 46 GB} \\
+        Operating System & {\fontsize{6.5pt}{7.5pt}\selectfont Rocky Linux 8.5 (Green Obsidian)} \\
+        Language         & {\fontsize{6.5pt}{7.5pt}\selectfont Python 3.10.14} \\
+        Frame            & {\fontsize{6.5pt}{7.5pt}\selectfont PyTorch 2.1.0} \\
+        CUDA Version     & {\fontsize{6.5pt}{7.5pt}\selectfont 12.6} \\
         \bottomrule
     \end{tabular}
 \end{table}
